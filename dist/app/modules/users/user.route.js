@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserRouter = void 0;
+const express_1 = require("express");
+const user_controller_1 = require("./user.controller");
+const user_zodvalidation_1 = require("./user.zodvalidation");
+const zodValidator_1 = require("../../middlewares/zodValidator");
+const user_interface_1 = require("./user.interface");
+const checkAuth_1 = require("../../middlewares/checkAuth");
+const admin_controller_1 = require("../admin/admin.controller");
+const router = (0, express_1.Router)();
+router.post("/register", (0, zodValidator_1.validationUser)(user_zodvalidation_1.createUserValidationSchema), user_controller_1.UserController.createUser);
+router.get("/admin/all-users", (0, checkAuth_1.checkAuth)(user_interface_1.userRole.ADMIN), admin_controller_1.AdminController.getAllUsers);
+router.get("/admin/all-wallets", (0, checkAuth_1.checkAuth)(user_interface_1.userRole.ADMIN), admin_controller_1.AdminController.getAllWallets);
+router.patch("/admin/wallet/:walletId/toggle-status", (0, checkAuth_1.checkAuth)(user_interface_1.userRole.ADMIN), admin_controller_1.AdminController.toggleWalletStatus);
+router.patch("/admin/agent/:agentId/toggle-status", (0, checkAuth_1.checkAuth)(user_interface_1.userRole.ADMIN), admin_controller_1.AdminController.toggleAgentStatus);
+exports.UserRouter = router;
