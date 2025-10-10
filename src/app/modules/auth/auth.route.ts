@@ -13,3 +13,5 @@ router.post(
   checkAuth(...Object.values(userRole)),
   AuthController.resetPassword
 );
+
+export const AuthRouter = router;

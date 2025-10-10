@@ -35,7 +35,9 @@ const walletSchema = new Schema<IWallet>(
   }
 );
 //indexs performancer er jonno
-walletSchema.index({ userId: 1 });
+
 walletSchema.index({ status: 1 });
+walletSchema.index({ isDeleted: 1 });
+walletSchema.index({ createdAt: -1 });
 
 export const Wallet = model<IWallet>("Wallet", walletSchema);
