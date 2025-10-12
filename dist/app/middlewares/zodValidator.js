@@ -23,12 +23,17 @@ const validationUser = (zodSchema) => (req, res, next) => __awaiter(void 0, void
     }
     catch (error) {
         if (error instanceof zod_1.ZodError) {
-            const formattedErrors = error.issues.map((err) => ({
-                field: err.path.join(".") || "unknown",
-                message: err.message,
-                received: err.code === "invalid_type" ? err.received : undefined,
-                expected: err.code === "invalid_type" ? err.expected : undefined,
-            }));
+            const formattedErrors = error.issues.map((err) => {
+                const baseError = {
+                    field: err.path.join(".") || "unknown",
+                    message: err.message,
+                };
+                if (err.code === "invalid_type") {
+                    const invalidTypeErr = err;
+                    return Object.assign(Object.assign({}, baseError), { received: invalidTypeErr.received, expected: invalidTypeErr.expected });
+                }
+                return baseError;
+            });
             const errorMessage = formattedErrors
                 .map((err) => `${err.field}: ${err.message}`)
                 .join(", ");

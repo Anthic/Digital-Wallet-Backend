@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatusCode from "http-status-codes";
 import mongoose, { Types } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
@@ -53,14 +54,14 @@ const addMoney = async (
       { session, new: true }
     );
     await session.commitTransaction();
-    console.log(` Money added: ${amount} paisa to wallet ${wallet._id}`);
+    // console.log(` Money added: ${amount} paisa to wallet ${wallet._id}`);
     return transaction;
   } catch (error) {
     if (session.inTransaction()) {
       await session.abortTransaction();
     }
 
-    console.error(" Add money failed:", error);
+    // console.error(" Add money failed:", error);
     throw error;
   } finally {
     session.endSession();
@@ -112,14 +113,14 @@ const withdrawMoney = async (
       { session, new: true }
     );
     await session.commitTransaction();
-    console.log(` Money withdrawn: ${amount} paisa from wallet ${wallet._id}`);
+    // console.log(` Money withdrawn: ${amount} paisa from wallet ${wallet._id}`);
     return transaction;
   } catch (error) {
     if (session.inTransaction()) {
       await session.abortTransaction();
     }
 
-    console.error(" Withdraw money failed:", error);
+    // console.error(" Withdraw money failed:", error);
     throw error;
   } finally {
     await session.endSession();
@@ -225,14 +226,14 @@ const sendMoney = async (
     );
     await session.commitTransaction();
 
-    console.log(
-      ` Money sent: ${amount} paisa from ${fromWallet._id} to ${toWallet._id}`
-    );
-    console.log(
-      ` Sender balance: ${fromWallet.balance - amount}, Receiver balance: ${
-        toWallet.balance + amount
-      }`
-    );
+    // console.log(
+    //   ` Money sent: ${amount} paisa from ${fromWallet._id} to ${toWallet._id}`
+    // );
+    // console.log(
+    //   ` Sender balance: ${fromWallet.balance - amount}, Receiver balance: ${
+    //     toWallet.balance + amount
+    //   }`
+    // );
 
     return transaction;
   } catch (error) {
@@ -240,7 +241,7 @@ const sendMoney = async (
       await session.abortTransaction();
     }
 
-    console.error(" Send money failed:", error);
+    // console.error(" Send money failed:", error);
     throw error;
   } finally {
     await session.endSession();
@@ -249,8 +250,8 @@ const sendMoney = async (
 
 const getTransactionHistory = async (
   userId: Types.ObjectId,
-  page: number = 1,
-  limit: number = 10,
+  page = 1,
+  limit= 10,
   type?: string,
   status?: string
 ): Promise<{ transactions: ITransaction[]; total: number }> => {
@@ -295,8 +296,8 @@ const getTransactionHistory = async (
 };
 
 const getAllTransactions = async (
-  page: number = 1,
-  limit: number = 10,
+  page= 1,
+  limit = 10,
   type?: string,
   status?: string
 ): Promise<{ transactions: ITransaction[]; total: number }> => {

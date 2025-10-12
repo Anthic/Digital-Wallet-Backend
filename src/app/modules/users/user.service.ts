@@ -3,7 +3,7 @@ import { IUser } from "./user.interface";
 import { User } from "./user.model";
 import httpStatusCode from "http-status-codes";
 
-import bycripts from "bcrypt";
+
 import mongoose from "mongoose";
 import { WalletService } from "../wallet/wallet.service";
 const createUser = async (payload: Partial<IUser>) => {

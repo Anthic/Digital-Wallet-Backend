@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatusCode from "http-status-codes";
 import { Request, Response } from "express";
 import { catchAsync } from "../../../utils/catchAsync";

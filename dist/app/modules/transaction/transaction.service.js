@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionService = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const uuid_1 = require("uuid");
@@ -49,14 +50,14 @@ const addMoney = (userId, amount, description) => __awaiter(void 0, void 0, void
         });
         yield wallet_model_1.Wallet.findByIdAndUpdate(wallet._id, { $inc: { balance: amount } }, { session, new: true });
         yield session.commitTransaction();
-        console.log(` Money added: ${amount} paisa to wallet ${wallet._id}`);
+        // console.log(` Money added: ${amount} paisa to wallet ${wallet._id}`);
         return transaction;
     }
     catch (error) {
         if (session.inTransaction()) {
             yield session.abortTransaction();
         }
-        console.error(" Add money failed:", error);
+        // console.error(" Add money failed:", error);
         throw error;
     }
     finally {
@@ -94,14 +95,14 @@ const withdrawMoney = (userId, amount, description) => __awaiter(void 0, void 0,
         });
         yield wallet_model_1.Wallet.findByIdAndUpdate(wallet._id, { $inc: { balance: -amount } }, { session, new: true });
         yield session.commitTransaction();
-        console.log(` Money withdrawn: ${amount} paisa from wallet ${wallet._id}`);
+        // console.log(` Money withdrawn: ${amount} paisa from wallet ${wallet._id}`);
         return transaction;
     }
     catch (error) {
         if (session.inTransaction()) {
             yield session.abortTransaction();
         }
-        console.error(" Withdraw money failed:", error);
+        // console.error(" Withdraw money failed:", error);
         throw error;
     }
     finally {
@@ -174,15 +175,21 @@ const sendMoney = (fromUserId, toUserEmail, amount, description) => __awaiter(vo
         //update reciver wallet balance
         yield wallet_model_1.Wallet.findByIdAndUpdate(toWallet._id, { $inc: { balance: amount } }, { session, new: true });
         yield session.commitTransaction();
-        console.log(` Money sent: ${amount} paisa from ${fromWallet._id} to ${toWallet._id}`);
-        console.log(` Sender balance: ${fromWallet.balance - amount}, Receiver balance: ${toWallet.balance + amount}`);
+        // console.log(
+        //   ` Money sent: ${amount} paisa from ${fromWallet._id} to ${toWallet._id}`
+        // );
+        // console.log(
+        //   ` Sender balance: ${fromWallet.balance - amount}, Receiver balance: ${
+        //     toWallet.balance + amount
+        //   }`
+        // );
         return transaction;
     }
     catch (error) {
         if (session.inTransaction()) {
             yield session.abortTransaction();
         }
-        console.error(" Send money failed:", error);
+        // console.error(" Send money failed:", error);
         throw error;
     }
     finally {

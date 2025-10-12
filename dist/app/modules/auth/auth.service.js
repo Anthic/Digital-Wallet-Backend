@@ -41,11 +41,16 @@ const credentialLogin = (payload) => __awaiter(void 0, void 0, void 0, function*
         throw new appError_1.default("Incorrect password", http_status_codes_1.default.UNAUTHORIZED);
     }
     const userToken = (0, userToken_1.createUserToken)(userExists);
-    const _a = userExists.toObject(), { password: pass } = _a, rest = __rest(_a, ["password"]);
+    const userObject = userExists.toObject();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const userWithoutPassword = ((_a) => {
+        var { password } = _a, rest = __rest(_a, ["password"]);
+        return rest;
+    })(userObject);
     return {
         accessToken: userToken.accessToken,
         refreshToken: userToken.refreshToken,
-        user: rest,
+        user: userWithoutPassword,
     };
 });
 const getNewAccessToken = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
@@ -56,6 +61,9 @@ const getNewAccessToken = (refreshToken) => __awaiter(void 0, void 0, void 0, fu
 });
 const resetPassword = (oldPassword, newPassword, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.findById(decodedToken.userId);
+    if (!user) {
+        throw new appError_1.default("User not found", http_status_codes_1.default.NOT_FOUND);
+    }
     const isOldPasswordMatch = yield bcrypt_1.default.compare(oldPassword, user.password);
     if (!isOldPasswordMatch) {
         throw new appError_1.default("Old password is incorrect", http_status_codes_1.default.UNAUTHORIZED);

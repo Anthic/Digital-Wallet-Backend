@@ -8,7 +8,9 @@ const appError_1 = __importDefault(require("../errorHelper/appError"));
 const env_1 = require("../../config/env");
 const zod_1 = require("zod");
 const mongoose_1 = require("mongoose");
-const globalErrorHandler = (error, req, res, next) => {
+const globalErrorHandler = (error, req, res, 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+next) => {
     let statusCode = 500;
     let message = "Something went wrong!";
     let errorDetails = null;
@@ -24,9 +26,13 @@ const globalErrorHandler = (error, req, res, next) => {
             message: issue.message,
         }));
     }
-    else if (error.code === 11000) {
+    else if (error &&
+        typeof error === "object" &&
+        "code" in error &&
+        error.code === 11000) {
         statusCode = 400;
-        const field = Object.keys(error.keyValue || {})[0];
+        const mongoError = error;
+        const field = Object.keys(mongoError.keyValue || {})[0];
         message = `${field} already exists. Please use a different ${field}.`;
     }
     else if (error instanceof mongoose_1.Error.ValidationError) {
@@ -46,7 +52,7 @@ const globalErrorHandler = (error, req, res, next) => {
     }
     res.status(statusCode).json(Object.assign(Object.assign({ success: false, statusCode,
         message }, (errorDetails && { errors: errorDetails })), (env_1.configEnv.NODE_ENV === "development" && {
-        stack: error.stack,
+        stack: error instanceof Error ? error.stack : undefined,
         fullError: error,
     })));
 };

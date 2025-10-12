@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionController = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const catchAsync_1 = require("../../../utils/catchAsync");
 const appError_1 = __importDefault(require("../../errorHelper/appError"));
